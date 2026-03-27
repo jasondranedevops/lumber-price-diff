@@ -13,6 +13,7 @@ Environment:
 from __future__ import annotations
 
 import argparse
+import json as _json
 import logging
 import os
 import sys
@@ -121,6 +122,11 @@ Examples:
         help="Cache API responses for this many seconds (0 disables cache, default: 3600)",
     )
     parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON (suppresses table and chart)",
+    )
+    parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         help="Enable debug logging",
@@ -154,6 +160,13 @@ def main(argv: list[str] | None = None) -> int:
         queries=queries,
         cache_ttl=args.cache_ttl,
     )
+
+    if args.json:
+        print(_json.dumps([
+            {"query": r.query, "zip1": r.zip1, "zip2": r.zip2, "delta": r.delta}
+            for r in results
+        ]))
+        return 0
 
     print_summary(results, args.zip1, args.zip2)
 
