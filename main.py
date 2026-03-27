@@ -114,6 +114,13 @@ Examples:
         help="Override default lumber search queries",
     )
     parser.add_argument(
+        "--cache-ttl",
+        type=int,
+        default=3600,
+        metavar="SECONDS",
+        help="Cache API responses for this many seconds (0 disables cache, default: 3600)",
+    )
+    parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         help="Enable debug logging",
@@ -145,6 +152,7 @@ def main(argv: list[str] | None = None) -> int:
         zip2=args.zip2,
         api_key=args.key,
         queries=queries,
+        cache_ttl=args.cache_ttl,
     )
 
     print_summary(results, args.zip1, args.zip2)
